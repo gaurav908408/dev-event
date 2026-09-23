@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
 import { Event } from "@/database";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 interface RouteParams {
   params: Promise<{
     slug: string;
@@ -125,7 +128,37 @@ export async function PUT(
 
     await connectToDatabase();
 
-    const existingEvent = await Event.findOne({ slug });
+    let existingEvent = await Event.findOne({ slug });
+
+    // If not found in DB, check if it's a default constant and upsert it into DB
+    if (!existingEvent) {
+      const { events: defaultEvents } = await import("@/lib/constants");
+      const foundConstant = defaultEvents.find(
+        (e) =>
+          e.id === slug ||
+          e.title.toLowerCase().replace(/[^\w\s-]/g, "").replace(/[\s_-]+/g, "-") === slug
+      );
+
+      if (foundConstant) {
+        existingEvent = new Event({
+          title: foundConstant.title,
+          slug: foundConstant.id || slug,
+          description: foundConstant.description || "Developer event",
+          overview: "This event brings together industry leaders, senior developers, and passionate creators.",
+          image: foundConstant.image,
+          venue: foundConstant.location || "Convention Center",
+          location: foundConstant.location || "Global / Online",
+          date: foundConstant.date || "2026-10-24",
+          time: "10:00 AM - 5:00 PM EST",
+          mode: "hybrid",
+          audience: "Developers & Engineers",
+          agenda: ["Main Keynote & Sessions"],
+          organizer: "Dev Event Community",
+          tags: [foundConstant.category || "Tech"],
+        });
+      }
+    }
+
     if (!existingEvent) {
       return NextResponse.json(
         { success: false, error: "Event not found or cannot be edited." },
@@ -187,13 +220,6 @@ export async function DELETE(
     await connectToDatabase();
 
     const deletedEvent = await Event.findOneAndDelete({ slug });
-
-    if (!deletedEvent) {
-      return NextResponse.json(
-        { success: false, error: "Event not found or already deleted." },
-        { status: 404 }
-      );
-    }
 
     return NextResponse.json(
       { success: true, message: "Event deleted successfully." },

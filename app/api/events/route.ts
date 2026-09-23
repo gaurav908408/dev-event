@@ -3,6 +3,9 @@ import connectToDatabase from "@/lib/mongodb";
 import { Event } from "@/database";
 import { events as defaultEvents } from "@/lib/constants";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET(): Promise<NextResponse> {
   try {
     await connectToDatabase();

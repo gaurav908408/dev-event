@@ -4,6 +4,9 @@ import { events as defaultEvents } from "@/lib/constants";
 import connectToDatabase from "@/lib/mongodb";
 import { Event } from "@/database";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function Home() {
   let displayEvents = defaultEvents;
 
