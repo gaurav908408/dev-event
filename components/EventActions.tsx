@@ -46,14 +46,14 @@ export default function EventActions({ slug, eventTitle }: EventActionsProps) {
       <div className="flex flex-row items-center gap-3">
         <Link
           href={`/events/${slug}/edit`}
-          className="inline-flex items-center gap-2 bg-dark-200 hover:bg-dark-100 text-white font-medium px-4 py-2 rounded-lg border border-border-dark text-sm transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 bg-dark-200/90 hover:bg-dark-100 hover:border-primary/60 hover:text-primary hover:shadow-[0_0_20px_rgba(89,222,202,0.4)] text-white font-semibold px-4 py-2.5 rounded-xl border border-border-dark text-sm transition-all duration-300 ease-out hover:scale-105 active:scale-95 cursor-pointer"
         >
           ✏️ Edit Event
         </Link>
 
         <button
           onClick={() => setShowConfirm(true)}
-          className="inline-flex items-center gap-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 font-medium px-4 py-2 rounded-lg border border-rose-800/50 text-sm transition-colors cursor-pointer"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-950/60 to-rose-900/40 hover:from-rose-600 hover:to-red-600 text-rose-200 hover:text-white font-semibold px-4 py-2.5 rounded-xl border border-rose-700/50 hover:border-rose-500 hover:shadow-[0_0_25px_rgba(244,63,94,0.55)] text-sm transition-all duration-300 ease-out hover:scale-105 active:scale-95 cursor-pointer"
         >
           🗑️ Delete Event
         </button>

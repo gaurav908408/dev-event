@@ -18,7 +18,12 @@ const Navbar = () => {
         <ul>
           <Link href="/">Home</Link>
           <Link href="/#events">Events</Link>
-          <Link href="/create-event">Create Event</Link>
+          <Link
+            href="/create-event"
+            className="!px-4 !py-2 !rounded-lg !bg-gradient-to-r !from-[#59deca] !to-[#38bdf8] !text-slate-950 !font-bold hover:!shadow-[0_0_20px_rgba(89,222,202,0.5)] hover:!scale-105 active:!scale-95 transition-all !duration-300 border-none !no-underline"
+          >
+            + Create Event
+          </Link>
         </ul>
       </nav>
     </header>

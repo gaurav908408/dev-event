@@ -10,19 +10,24 @@ export default async function Home() {
   try {
     await connectToDatabase();
     const dbEvents = await Event.find({}).sort({ createdAt: -1 }).lean();
-    if (dbEvents && dbEvents.length > 0) {
-      displayEvents = dbEvents.map((e: any) => ({
-        id: e._id?.toString() || e.slug,
-        slug: e.slug,
-        title: e.title,
-        image: e.image,
-        date: e.date,
-        location: e.location,
-        description: e.description,
-        category: e.tags?.[0] || e.mode || "Dev Event",
-      }));
-    }
-  } catch (err) {}
+    const dbFormatted = (dbEvents || []).map((e: any) => ({
+      id: e._id?.toString() || e.slug,
+      slug: e.slug,
+      title: e.title,
+      image: e.image,
+      date: e.date,
+      location: e.location,
+      description: e.description,
+      category: e.tags?.[0] || e.mode || "Dev Event",
+    }));
+
+    const existingSlugs = new Set(dbFormatted.map((e) => e.slug));
+    const filteredDefaults = defaultEvents.filter((d) => !existingSlugs.has(d.id));
+
+    displayEvents = [...dbFormatted, ...filteredDefaults];
+  } catch (err) {
+    displayEvents = defaultEvents;
+  }
 
   return (
     <main id="home" className="mx-auto container max-w-7xl px-6 sm:px-10 py-10">

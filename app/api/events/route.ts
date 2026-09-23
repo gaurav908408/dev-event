@@ -6,13 +6,14 @@ import { events as defaultEvents } from "@/lib/constants";
 export async function GET(): Promise<NextResponse> {
   try {
     await connectToDatabase();
-    let eventsList = await Event.find({}).sort({ createdAt: -1 }).lean();
+    let dbEvents = await Event.find({}).sort({ createdAt: -1 }).lean();
 
-    if (!eventsList || eventsList.length === 0) {
-      return NextResponse.json({ success: true, data: defaultEvents });
-    }
+    const existingSlugs = new Set((dbEvents || []).map((e: any) => e.slug));
+    const filteredDefaults = defaultEvents.filter((d) => !existingSlugs.has(d.id));
 
-    return NextResponse.json({ success: true, data: eventsList });
+    const combined = [...(dbEvents || []), ...filteredDefaults];
+
+    return NextResponse.json({ success: true, data: combined });
   } catch (error: unknown) {
     return NextResponse.json({ success: true, data: defaultEvents });
   }

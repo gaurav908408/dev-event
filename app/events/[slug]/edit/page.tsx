@@ -341,13 +341,13 @@ export default function EditEventPage({ params }: EditEventPageProps) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-primary hover:bg-[#7cf4e2] hover:shadow-[0_0_25px_rgba(89,222,202,0.5)] active:scale-95 text-black font-semibold text-lg py-3 px-6 rounded-lg transition-all duration-200 cursor-pointer"
+              className="flex-1 bg-gradient-to-r from-[#59deca] via-[#38bdf8] to-[#6366f1] hover:brightness-110 hover:shadow-[0_0_30px_rgba(56,189,248,0.55)] hover:-translate-y-0.5 active:translate-y-0 active:scale-95 text-slate-950 font-bold text-lg py-3.5 px-6 rounded-xl transition-all duration-300 ease-out cursor-pointer"
             >
               {isSubmitting ? "Saving Changes..." : "Save Changes"}
             </button>
             <Link
               href={`/events/${slug}`}
-              className="bg-dark-200 hover:bg-dark-100 text-white font-medium py-3 px-6 rounded-lg border border-border-dark text-center transition-colors"
+              className="bg-dark-200/80 hover:bg-dark-100 hover:border-primary/60 hover:text-primary hover:shadow-[0_0_20px_rgba(89,222,202,0.3)] text-white font-medium py-3.5 px-6 rounded-xl border border-border-dark text-center transition-all duration-300"
             >
               Cancel
             </Link>

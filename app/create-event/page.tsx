@@ -280,7 +280,7 @@ export default function CreateEventPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-primary hover:bg-[#7cf4e2] hover:shadow-[0_0_25px_rgba(89,222,202,0.5)] hover:-translate-y-0.5 active:translate-y-0 active:scale-95 text-black font-semibold text-lg py-3 px-6 rounded-lg transition-all duration-200 ease-out cursor-pointer mt-4"
+            className="bg-gradient-to-r from-[#59deca] via-[#38bdf8] to-[#6366f1] hover:brightness-110 hover:shadow-[0_0_30px_rgba(56,189,248,0.55)] hover:-translate-y-0.5 active:translate-y-0 active:scale-95 text-slate-950 font-bold text-lg py-3.5 px-6 rounded-xl transition-all duration-300 ease-out cursor-pointer mt-4"
           >
             {isSubmitting ? "Publishing Event..." : "Publish Event"}
           </button>
