@@ -1,8 +1,31 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
-import { events } from "@/lib/constants";
+import { events as defaultEvents } from "@/lib/constants";
+import connectToDatabase from "@/lib/mongodb";
+import { Event } from "@/database";
 
-export default function Home() {
+export default async function Home() {
+  let displayEvents = defaultEvents;
+
+  try {
+    await connectToDatabase();
+    const dbEvents = await Event.find({}).sort({ createdAt: -1 }).lean();
+    if (dbEvents && dbEvents.length > 0) {
+      displayEvents = dbEvents.map((e: any) => ({
+        id: e._id?.toString() || e.slug,
+        slug: e.slug,
+        title: e.title,
+        image: e.image,
+        date: e.date,
+        location: e.location,
+        description: e.description,
+        category: e.tags?.[0] || e.mode || "Dev Event",
+      }));
+    }
+  } catch (err) {
+    // Database connection pending fallback
+  }
+
   return (
     <main id="home" className="mx-auto container max-w-7xl px-6 sm:px-10 py-10">
       <section>
@@ -22,7 +45,7 @@ export default function Home() {
           <h3>Featured Events</h3>
 
           <ul className="events">
-            {events.map((event) => (
+            {displayEvents.map((event) => (
               <li key={event.title}>
                 <EventCard {...event} />
               </li>

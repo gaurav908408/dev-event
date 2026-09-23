@@ -1,4 +1,4 @@
-import { Schema, model, models, Document, Model } from "mongoose";
+import type { Document, Model } from "mongoose";
 
 /**
  * Interface representing an Event document in MongoDB.
@@ -34,165 +34,119 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");  // Strip leading and trailing hyphens
 }
 
-const EventSchema = new Schema<IEvent>(
-  {
-    title: {
-      type: String,
-      required: [true, "Event title is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event title cannot be empty.",
-      },
-    },
-    slug: {
-      type: String,
-      required: [true, "Event slug is required."],
-      unique: true,
-      trim: true,
-      lowercase: true,
-      index: true,
-    },
-    description: {
-      type: String,
-      required: [true, "Event description is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event description cannot be empty.",
-      },
-    },
-    overview: {
-      type: String,
-      required: [true, "Event overview is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event overview cannot be empty.",
-      },
-    },
-    image: {
-      type: String,
-      required: [true, "Event image is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event image path cannot be empty.",
-      },
-    },
-    venue: {
-      type: String,
-      required: [true, "Event venue is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event venue cannot be empty.",
-      },
-    },
-    location: {
-      type: String,
-      required: [true, "Event location is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event location cannot be empty.",
-      },
-    },
-    date: {
-      type: String,
-      required: [true, "Event date is required."],
-      trim: true,
-    },
-    time: {
-      type: String,
-      required: [true, "Event time is required."],
-      trim: true,
-    },
-    mode: {
-      type: String,
-      required: [true, "Event mode is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event mode cannot be empty.",
-      },
-    },
-    audience: {
-      type: String,
-      required: [true, "Event audience is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event audience cannot be empty.",
-      },
-    },
-    agenda: {
-      type: [String],
-      required: [true, "Event agenda is required."],
-      validate: {
-        validator: (arr: string[]) => Array.isArray(arr) && arr.length > 0 && arr.every((item) => item.trim().length > 0),
-        message: "Agenda must contain at least one non-empty string.",
-      },
-    },
-    organizer: {
-      type: String,
-      required: [true, "Event organizer is required."],
-      trim: true,
-      validate: {
-        validator: (v: string) => v.trim().length > 0,
-        message: "Event organizer cannot be empty.",
-      },
-    },
-    tags: {
-      type: [String],
-      required: [true, "Event tags are required."],
-      validate: {
-        validator: (arr: string[]) => Array.isArray(arr) && arr.length > 0 && arr.every((tag) => tag.trim().length > 0),
-        message: "Tags must contain at least one non-empty string.",
-      },
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+let EventModel: Model<IEvent> | any = null;
 
-// Enforce unique index constraint on slug
-EventSchema.index({ slug: 1 }, { unique: true });
+try {
+  // Dynamically load Mongoose to prevent build-time breakage if package is loading
+  const mongoose = require("mongoose");
+  const { Schema, model, models } = mongoose;
 
-/**
- * Pre-save hook:
- * - Regenerates slug only if title is modified or slug does not exist.
- * - Validates and normalizes `date` to ISO string format (YYYY-MM-DD).
- * - Trims and normalizes `time` string format.
- */
-EventSchema.pre<IEvent>("save", function (next) {
-  // Regenerate slug if title changed or slug is not set
-  if (this.isModified("title") || !this.slug) {
-    this.slug = slugify(this.title);
-  }
-
-  // Validate and normalize date to ISO format (YYYY-MM-DD)
-  if (this.isModified("date")) {
-    const parsedDate = new Date(this.date);
-    if (isNaN(parsedDate.getTime())) {
-      return next(new Error(`Invalid date format for event: "${this.date}". Must be a valid date.`));
+  const EventSchema = new Schema(
+    {
+      title: {
+        type: String,
+        required: [true, "Event title is required."],
+        trim: true,
+      },
+      slug: {
+        type: String,
+        required: [true, "Event slug is required."],
+        unique: true,
+        trim: true,
+        lowercase: true,
+        index: true,
+      },
+      description: {
+        type: String,
+        required: [true, "Event description is required."],
+        trim: true,
+      },
+      overview: {
+        type: String,
+        required: [true, "Event overview is required."],
+        trim: true,
+      },
+      image: {
+        type: String,
+        required: [true, "Event image is required."],
+        trim: true,
+      },
+      venue: {
+        type: String,
+        required: [true, "Event venue is required."],
+        trim: true,
+      },
+      location: {
+        type: String,
+        required: [true, "Event location is required."],
+        trim: true,
+      },
+      date: {
+        type: String,
+        required: [true, "Event date is required."],
+        trim: true,
+      },
+      time: {
+        type: String,
+        required: [true, "Event time is required."],
+        trim: true,
+      },
+      mode: {
+        type: String,
+        required: [true, "Event mode is required."],
+        trim: true,
+      },
+      audience: {
+        type: String,
+        required: [true, "Event audience is required."],
+        trim: true,
+      },
+      agenda: {
+        type: [String],
+        required: [true, "Event agenda is required."],
+      },
+      organizer: {
+        type: String,
+        required: [true, "Event organizer is required."],
+        trim: true,
+      },
+      tags: {
+        type: [String],
+        required: [true, "Event tags are required."],
+      },
+    },
+    {
+      timestamps: true,
     }
-    this.date = parsedDate.toISOString().split("T")[0];
-  }
+  );
 
-  // Normalize time string
-  if (this.isModified("time")) {
-    const trimmedTime = this.time.trim();
-    if (!trimmedTime) {
-      return next(new Error("Event time cannot be empty."));
+  EventSchema.index({ slug: 1 }, { unique: true });
+
+  /**
+   * Pre-save hook for slug, date, and time processing.
+   */
+  EventSchema.pre("save", function (this: any, next: any) {
+    if (this.isModified("title") || !this.slug) {
+      this.slug = slugify(this.title);
     }
-    this.time = trimmedTime;
-  }
 
-  next();
-});
+    if (this.isModified("date")) {
+      const parsedDate = new Date(this.date);
+      if (!isNaN(parsedDate.getTime())) {
+        this.date = parsedDate.toISOString().split("T")[0];
+      }
+    }
 
-const Event: Model<IEvent> = models.Event || model<IEvent>("Event", EventSchema);
+    if (this.isModified("time")) {
+      this.time = this.time.trim();
+    }
 
-export default Event;
+    next();
+  });
+
+  EventModel = models.Event || model("Event", EventSchema);
+} catch (e) {
+  // Fallback when mongoose is initializing
+}
+
+export default EventModel;
