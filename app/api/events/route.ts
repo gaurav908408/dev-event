@@ -58,8 +58,23 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       ? tags.split(",").map((t) => t.trim()).filter((t) => t.length > 0)
       : ["Developer", "Tech"];
 
+    const slugify = (text: string) =>
+      text
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/[\s_-]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+    let slug = slugify(title) || `event-${Date.now()}`;
+    const existingEvent = await Event.findOne({ slug });
+    if (existingEvent) {
+      slug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
+
     const newEvent = await Event.create({
       title,
+      slug,
       description,
       overview,
       image,

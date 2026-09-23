@@ -1,4 +1,4 @@
-import type { Mongoose } from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 interface MongooseCache {
   conn: Mongoose | null;
@@ -10,18 +10,28 @@ declare global {
   var mongooseCache: MongooseCache | undefined;
 }
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
 let cached: MongooseCache = global.mongooseCache || { conn: null, promise: null };
 
 if (!global.mongooseCache) {
   global.mongooseCache = cached;
 }
 
-async function connectToDatabase(): Promise<any> {
-  if (!MONGODB_URI) {
+async function connectToDatabase(): Promise<Mongoose> {
+  let mongodbUri = process.env.MONGODB_URI?.trim();
+
+  if (mongodbUri) {
+    mongodbUri = mongodbUri.replace(/^["']|["']$/g, "").trim();
+  }
+
+  if (!mongodbUri) {
     throw new Error(
-      "Please define the MONGODB_URI environment variable inside .env.local"
+      "MONGODB_URI environment variable is missing. Please set MONGODB_URI in your Vercel Project Settings (Environment Variables) or .env.local."
+    );
+  }
+
+  if (!mongodbUri.startsWith("mongodb://") && !mongodbUri.startsWith("mongodb+srv://")) {
+    throw new Error(
+      'Invalid scheme, expected connection string to start with "mongodb://" or "mongodb+srv://". Please verify your MONGODB_URI.'
     );
   }
 
@@ -30,18 +40,13 @@ async function connectToDatabase(): Promise<any> {
   }
 
   if (!cached.promise) {
-    try {
-      const mongoose = require("mongoose");
-      const opts = {
-        bufferCommands: false,
-      };
+    const opts = {
+      bufferCommands: false,
+    };
 
-      cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance: any) => {
-        return mongooseInstance;
-      });
-    } catch (err) {
-      throw new Error("Mongoose driver is loading or not installed.");
-    }
+    cached.promise = mongoose.connect(mongodbUri, opts).then((mongooseInstance) => {
+      return mongooseInstance;
+    });
   }
 
   try {

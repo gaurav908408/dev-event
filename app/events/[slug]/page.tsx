@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookingForm from "@/components/BookingForm";
+import EventActions from "@/components/EventActions";
 
 interface PageProps {
   params: Promise<{
@@ -83,9 +84,12 @@ export default async function EventDetailsPage({ params }: PageProps) {
 
   return (
     <main id="event" className="mx-auto container max-w-7xl px-6 sm:px-10 py-10">
-      <Link href="/#events" className="inline-flex items-center gap-2 text-sm text-light-200 hover:text-primary mb-8 transition-colors">
-        ← Back to all events
-      </Link>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <Link href="/#events" className="inline-flex items-center gap-2 text-sm text-light-200 hover:text-primary transition-colors">
+          ← Back to all events
+        </Link>
+        <EventActions slug={event.slug} eventTitle={event.title} />
+      </div>
 
       <div className="header">
         <div className="flex flex-wrap gap-2 mb-2">

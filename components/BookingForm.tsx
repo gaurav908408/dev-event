@@ -78,7 +78,7 @@ export default function BookingForm({ eventId, slug, eventTitle }: BookingFormPr
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form suppressHydrationWarning onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email" className="text-sm font-medium text-light-100">
             Email Address

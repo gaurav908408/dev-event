@@ -1,11 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, use } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function CreateEventPage() {
+interface EditEventPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+export default function EditEventPage({ params }: EditEventPageProps) {
+  const resolvedParams = use(params);
+  const slug = resolvedParams.slug;
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -22,11 +38,57 @@ export default function CreateEventPage() {
     tags: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [statusMessage, setStatusMessage] = useState<{
-    type: "success" | "error";
-    text: string;
-  } | null>(null);
+  useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const response = await fetch(`/api/events/${slug}`);
+        const data = await response.json();
+
+        if (response.ok && data.success && data.data) {
+          const event = data.data;
+
+          // Format date string to YYYY-MM-DD for <input type="date"> if valid date
+          let formattedDate = event.date || "";
+          if (formattedDate && !formattedDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            const parsed = new Date(formattedDate);
+            if (!isNaN(parsed.getTime())) {
+              formattedDate = parsed.toISOString().split("T")[0];
+            }
+          }
+
+          setFormData({
+            title: event.title || "",
+            description: event.description || "",
+            overview: event.overview || "",
+            image: event.image || "/images/event1.svg",
+            venue: event.venue || "",
+            location: event.location || "",
+            date: formattedDate,
+            time: event.time || "",
+            mode: event.mode ? event.mode.toLowerCase() : "hybrid",
+            audience: event.audience || "",
+            agenda: Array.isArray(event.agenda) ? event.agenda.join("\n") : event.agenda || "",
+            organizer: event.organizer || "",
+            tags: Array.isArray(event.tags) ? event.tags.join(", ") : event.tags || "",
+          });
+        } else {
+          setStatusMessage({
+            type: "error",
+            text: data.error || "Event not found.",
+          });
+        }
+      } catch (err) {
+        setStatusMessage({
+          type: "error",
+          text: "Failed to load event details for editing.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchEvent();
+  }, [slug]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -40,8 +102,8 @@ export default function CreateEventPage() {
     setStatusMessage(null);
 
     try {
-      const response = await fetch("/api/events", {
-        method: "POST",
+      const response = await fetch(`/api/events/${slug}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
@@ -51,40 +113,49 @@ export default function CreateEventPage() {
       if (response.ok && data.success) {
         setStatusMessage({
           type: "success",
-          text: "Event created successfully! Redirecting to home...",
+          text: "Event updated successfully! Redirecting...",
         });
         setTimeout(() => {
-          router.push("/#events");
-        }, 1500);
+          router.push(`/events/${slug}`);
+          router.refresh();
+        }, 1200);
       } else {
         setStatusMessage({
           type: "error",
-          text: data.error || "Failed to create event. Please check inputs.",
+          text: data.error || "Failed to update event. Please check inputs.",
         });
       }
     } catch (error) {
       setStatusMessage({
         type: "error",
-        text: "An error occurred while creating the event.",
+        text: "An error occurred while updating the event.",
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  if (isLoading) {
+    return (
+      <main className="mx-auto container max-w-4xl px-6 py-20 text-center text-light-200">
+        <p className="text-lg">Loading event details for editing...</p>
+      </main>
+    );
+  }
+
   return (
-    <main id="create-event" className="mx-auto container max-w-4xl px-6 sm:px-10 py-10">
+    <main id="edit-event" className="mx-auto container max-w-4xl px-6 sm:px-10 py-10">
       <Link
-        href="/"
+        href={`/events/${slug}`}
         className="inline-flex items-center gap-2 text-sm text-light-200 hover:text-primary mb-8 transition-colors"
       >
-        ← Back to Home
+        ← Back to Event Details
       </Link>
 
       <div className="bg-dark-100/70 border border-border-dark p-6 sm:p-10 rounded-2xl shadow-2xl backdrop-blur-md">
-        <h1 className="text-3xl font-bold text-white mb-2">Create New Dev Event</h1>
+        <h1 className="text-3xl font-bold text-white mb-2">Edit Dev Event</h1>
         <p className="text-light-200 text-sm mb-8">
-          Fill in the details below to host your hackathon, conference, or tech meetup.
+          Update the event information below.
         </p>
 
         {statusMessage && (
@@ -106,7 +177,6 @@ export default function CreateEventPage() {
               <input
                 type="text"
                 name="title"
-                placeholder="e.g. Next.js & AI Hackathon"
                 value={formData.title}
                 onChange={handleChange}
                 className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -119,7 +189,6 @@ export default function CreateEventPage() {
               <input
                 type="text"
                 name="organizer"
-                placeholder="e.g. Dev Community Team"
                 value={formData.organizer}
                 onChange={handleChange}
                 className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -133,7 +202,6 @@ export default function CreateEventPage() {
             <input
               type="text"
               name="description"
-              placeholder="A brief summary of what the event is about"
               value={formData.description}
               onChange={handleChange}
               className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -146,7 +214,6 @@ export default function CreateEventPage() {
             <textarea
               name="overview"
               rows={4}
-              placeholder="Detailed description, goals, and what attendees will learn"
               value={formData.overview}
               onChange={handleChange}
               className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none resize-none"
@@ -156,7 +223,7 @@ export default function CreateEventPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-light-100">Date *</label>
+              <label className="text-sm font-medium text-light-100">Date (Pick from calendar) *</label>
               <input
                 type="date"
                 name="date"
@@ -172,7 +239,6 @@ export default function CreateEventPage() {
               <input
                 type="text"
                 name="time"
-                placeholder="e.g. 10:00 AM - 5:00 PM EST"
                 value={formData.time}
                 onChange={handleChange}
                 className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -201,7 +267,6 @@ export default function CreateEventPage() {
               <input
                 type="text"
                 name="location"
-                placeholder="e.g. San Francisco, CA & Online"
                 value={formData.location}
                 onChange={handleChange}
                 className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -214,7 +279,6 @@ export default function CreateEventPage() {
               <input
                 type="text"
                 name="venue"
-                placeholder="e.g. Moscone Center / Zoom"
                 value={formData.venue}
                 onChange={handleChange}
                 className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -229,7 +293,6 @@ export default function CreateEventPage() {
               <input
                 type="text"
                 name="audience"
-                placeholder="e.g. Software Engineers, Students"
                 value={formData.audience}
                 onChange={handleChange}
                 className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -242,7 +305,6 @@ export default function CreateEventPage() {
               <input
                 type="text"
                 name="image"
-                placeholder="/images/event1.svg"
                 value={formData.image}
                 onChange={handleChange}
                 className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -256,7 +318,6 @@ export default function CreateEventPage() {
             <textarea
               name="agenda"
               rows={4}
-              placeholder="09:00 AM - Welcome&#10;10:00 AM - Keynote Session&#10;01:00 PM - Workshop"
               value={formData.agenda}
               onChange={handleChange}
               className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none resize-none"
@@ -269,7 +330,6 @@ export default function CreateEventPage() {
             <input
               type="text"
               name="tags"
-              placeholder="NextJS, AI, React, Hackathon"
               value={formData.tags}
               onChange={handleChange}
               className="bg-dark-200 text-white rounded-lg px-4 py-2.5 border border-border-dark focus:border-primary outline-none"
@@ -277,13 +337,21 @@ export default function CreateEventPage() {
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-primary hover:bg-[#7cf4e2] hover:shadow-[0_0_25px_rgba(89,222,202,0.5)] hover:-translate-y-0.5 active:translate-y-0 active:scale-95 text-black font-semibold text-lg py-3 px-6 rounded-lg transition-all duration-200 ease-out cursor-pointer mt-4"
-          >
-            {isSubmitting ? "Publishing Event..." : "Publish Event"}
-          </button>
+          <div className="flex flex-row gap-4 mt-4">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 bg-primary hover:bg-[#7cf4e2] hover:shadow-[0_0_25px_rgba(89,222,202,0.5)] active:scale-95 text-black font-semibold text-lg py-3 px-6 rounded-lg transition-all duration-200 cursor-pointer"
+            >
+              {isSubmitting ? "Saving Changes..." : "Save Changes"}
+            </button>
+            <Link
+              href={`/events/${slug}`}
+              className="bg-dark-200 hover:bg-dark-100 text-white font-medium py-3 px-6 rounded-lg border border-border-dark text-center transition-colors"
+            >
+              Cancel
+            </Link>
+          </div>
         </form>
       </div>
     </main>
