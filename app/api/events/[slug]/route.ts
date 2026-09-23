@@ -8,25 +8,14 @@ interface RouteParams {
   }>;
 }
 
-/**
- * GET /api/events/[slug]
- * 
- * Fetches event details from the database by its unique slug identifier.
- * 
- * @param request - NextRequest object
- * @param context - Contains dynamic route params (slug)
- * @returns JSON response containing event data or error details
- */
 export async function GET(
   request: NextRequest,
   { params }: RouteParams
 ): Promise<NextResponse> {
   try {
-    // Await params object for Next.js App Router dynamic route parameters
     const resolvedParams = await params;
     const rawSlug = resolvedParams?.slug;
 
-    // Validate presence and type of slug parameter
     if (!rawSlug || typeof rawSlug !== "string" || rawSlug.trim().length === 0) {
       return NextResponse.json(
         {
@@ -39,16 +28,12 @@ export async function GET(
 
     const slug = rawSlug.trim().toLowerCase();
 
-    // Ensure database connection is active
     let event = null;
     try {
       await connectToDatabase();
       event = await Event.findOne({ slug }).lean();
-    } catch (dbError) {
-      // Database pending connection fallback
-    }
+    } catch (dbError) {}
 
-    // Fallback search in static constants if not found in database
     if (!event) {
       const { events: defaultEvents } = await import("@/lib/constants");
       const foundConstant = defaultEvents.find(
@@ -88,7 +73,6 @@ export async function GET(
       }
     }
 
-    // Return 404 if no event matches the provided slug
     if (!event) {
       return NextResponse.json(
         {
@@ -99,7 +83,6 @@ export async function GET(
       );
     }
 
-    // Return event details as JSON
     return NextResponse.json(
       {
         success: true,
@@ -108,7 +91,6 @@ export async function GET(
       { status: 200 }
     );
   } catch (error: unknown) {
-    // Log server-side error and return 500 response
     const errorMessage =
       error instanceof Error ? error.message : "An unexpected server error occurred.";
 

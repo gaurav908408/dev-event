@@ -1,8 +1,5 @@
 import type { Document, Model } from "mongoose";
 
-/**
- * Interface representing an Event document in MongoDB.
- */
 export interface IEvent extends Document {
   title: string;
   slug: string;
@@ -22,22 +19,18 @@ export interface IEvent extends Document {
   updatedAt: Date;
 }
 
-/**
- * Converts text into a URL-friendly slug string.
- */
 function slugify(text: string): string {
   return text
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, "") // Remove special characters
-    .replace(/[\s_-]+/g, "-")  // Replace spaces and underscores with a single hyphen
-    .replace(/^-+|-+$/g, "");  // Strip leading and trailing hyphens
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 let EventModel: Model<IEvent> | any = null;
 
 try {
-  // Dynamically load Mongoose to prevent build-time breakage if package is loading
   const mongoose = require("mongoose");
   const { Schema, model, models } = mongoose;
 
@@ -122,9 +115,6 @@ try {
 
   EventSchema.index({ slug: 1 }, { unique: true });
 
-  /**
-   * Pre-save hook for slug, date, and time processing.
-   */
   EventSchema.pre("save", function (this: any, next: any) {
     if (this.isModified("title") || !this.slug) {
       this.slug = slugify(this.title);
@@ -145,8 +135,6 @@ try {
   });
 
   EventModel = models.Event || model("Event", EventSchema);
-} catch (e) {
-  // Fallback when mongoose is initializing
-}
+} catch (e) {}
 
 export default EventModel;

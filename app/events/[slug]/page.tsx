@@ -12,7 +12,6 @@ interface PageProps {
 export default async function EventDetailsPage({ params }: PageProps) {
   const { slug } = await params;
 
-  // Fetch event details from database or constants fallback
   let event = null;
   try {
     const connectToDatabase = (await import("@/lib/mongodb")).default;
@@ -39,9 +38,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
         tags: dbEvent.tags || [],
       };
     }
-  } catch (err) {
-    // Database connection fallback
-  }
+  } catch (err) {}
 
   if (!event) {
     try {
@@ -77,9 +74,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
           tags: [foundConstant.category || "Tech", "Developer", "Conference"]
         };
       }
-    } catch (err) {
-      // Static fallback error
-    }
+    } catch (err) {}
   }
 
   if (!event) {
@@ -88,12 +83,10 @@ export default async function EventDetailsPage({ params }: PageProps) {
 
   return (
     <main id="event" className="mx-auto container max-w-7xl px-6 sm:px-10 py-10">
-      {/* Back button */}
       <Link href="/#events" className="inline-flex items-center gap-2 text-sm text-light-200 hover:text-primary mb-8 transition-colors">
         ← Back to all events
       </Link>
 
-      {/* Header Info */}
       <div className="header">
         <div className="flex flex-wrap gap-2 mb-2">
           {event.tags.map((tag: string) => (
@@ -103,50 +96,46 @@ export default async function EventDetailsPage({ params }: PageProps) {
           ))}
         </div>
 
-        <h1 className="text-4xl sm:text-5xl font-bold text-white leading-tight">{event.title}</h1>
-        <p className="text-light-200 text-lg">{event.description}</p>
+        <h1 className="text-3xl sm:text-5xl font-bold text-white leading-tight">{event.title}</h1>
+        <p className="text-light-200 text-base sm:text-lg">{event.description}</p>
       </div>
 
-      {/* Details Grid */}
       <div className="details">
-        {/* Left Column: Content */}
         <div className="content">
-          <div className="relative w-full h-[320px] sm:h-[420px] overflow-hidden rounded-2xl border border-border-dark">
+          <div className="relative w-full aspect-[16/10] sm:aspect-[21/9] overflow-hidden rounded-2xl border border-border-dark">
             <Image
               src={event.image}
               alt={event.title}
               fill
-              className="banner object-cover"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+              className="banner object-cover w-full h-full"
               priority
             />
           </div>
 
-          {/* Quick Info Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 bg-dark-100/70 p-6 rounded-2xl border border-border-dark">
             <div>
-              <p className="text-xs text-light-200 uppercase font-semibold">Date & Time</p>
+              <p className="text-xs text-light-200 uppercase font-semibold">Date &amp; Time</p>
               <p className="text-sm text-white font-medium mt-1">📅 {event.date}</p>
               <p className="text-xs text-light-200">⏰ {event.time}</p>
             </div>
             <div>
-              <p className="text-xs text-light-200 uppercase font-semibold">Location & Mode</p>
+              <p className="text-xs text-light-200 uppercase font-semibold">Location &amp; Mode</p>
               <p className="text-sm text-white font-medium mt-1">📍 {event.location}</p>
               <p className="text-xs text-light-200">🏛️ {event.venue} ({event.mode})</p>
             </div>
             <div>
-              <p className="text-xs text-light-200 uppercase font-semibold">Organizer & Audience</p>
+              <p className="text-xs text-light-200 uppercase font-semibold">Organizer &amp; Audience</p>
               <p className="text-sm text-white font-medium mt-1">👥 {event.organizer}</p>
               <p className="text-xs text-light-200">🎯 {event.audience}</p>
             </div>
           </div>
 
-          {/* Overview */}
           <div className="flex flex-col gap-3">
             <h2>Overview</h2>
             <p className="text-light-100 leading-relaxed">{event.overview}</p>
           </div>
 
-          {/* Agenda */}
           <div className="agenda">
             <h2>Event Agenda</h2>
             <ul className="flex flex-col gap-3 mt-2">
@@ -160,7 +149,6 @@ export default async function EventDetailsPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Right Column: Booking Form */}
         <div className="booking lg:sticky lg:top-24">
           <BookingForm
             eventId={event._id}

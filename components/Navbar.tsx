@@ -15,11 +15,11 @@ const Navbar = () => {
           />
           <p>dev event</p>
         </Link>
-         <ul>
-            <Link href="/">Home</Link>
-            <Link href="/#events">Events</Link>
-            <Link href="/create-event">Create Event</Link>
-         </ul>
+        <ul>
+          <Link href="/">Home</Link>
+          <Link href="/#events">Events</Link>
+          <Link href="/create-event">Create Event</Link>
+        </ul>
       </nav>
     </header>
   );

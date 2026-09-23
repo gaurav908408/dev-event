@@ -3,31 +3,21 @@ import connectToDatabase from "@/lib/mongodb";
 import { Event } from "@/database";
 import { events as defaultEvents } from "@/lib/constants";
 
-/**
- * GET /api/events
- * Returns list of all events from MongoDB.
- */
 export async function GET(): Promise<NextResponse> {
   try {
     await connectToDatabase();
     let eventsList = await Event.find({}).sort({ createdAt: -1 }).lean();
 
-    // If database has no events yet, return default constants
     if (!eventsList || eventsList.length === 0) {
       return NextResponse.json({ success: true, data: defaultEvents });
     }
 
     return NextResponse.json({ success: true, data: eventsList });
   } catch (error: unknown) {
-    // Return fallback constants if database connection is pending configuration
     return NextResponse.json({ success: true, data: defaultEvents });
   }
 }
 
-/**
- * POST /api/events
- * Creates a new event in MongoDB.
- */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
@@ -47,7 +37,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       tags,
     } = body;
 
-    // Validate required fields
     if (!title || !description || !overview || !image || !venue || !location || !date || !time || !mode || !audience || !organizer) {
       return NextResponse.json(
         { success: false, error: "Please fill out all required fields." },
@@ -57,7 +46,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     await connectToDatabase();
 
-    // Process array fields
     const parsedAgenda = Array.isArray(agenda)
       ? agenda
       : typeof agenda === "string"

@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
 
-/**
- * GET /api/event
- * Alias endpoint redirecting to /api/events
- */
 export async function GET(): Promise<NextResponse> {
   return NextResponse.json(
     {

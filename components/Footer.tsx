@@ -6,7 +6,6 @@ const Footer = () => {
     <footer className="mt-auto border-t border-border-dark bg-[#121212]/50 backdrop-blur-xl relative z-10">
       <div className="mx-auto container max-w-7xl px-6 sm:px-10 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          {/* Brand Info */}
           <div className="md:col-span-2 flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 w-fit">
               <Image
@@ -35,7 +34,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className="flex flex-col gap-3">
             <h4 className="text-white font-semibold text-base">Quick Links</h4>
             <ul className="flex flex-col gap-2 text-sm text-light-200 list-none p-0">
@@ -57,7 +55,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Categories */}
           <div className="flex flex-col gap-3">
             <h4 className="text-white font-semibold text-base">Categories</h4>
             <ul className="flex flex-col gap-2 text-sm text-light-200 list-none p-0">
@@ -77,7 +74,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-border-dark flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-light-200">
           <p>© {new Date().getFullYear()} DEV EVENT. All rights reserved.</p>
           <p className="text-light-200">

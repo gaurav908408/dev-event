@@ -175,7 +175,7 @@
     @apply flex flex-col gap-3 rounded-2xl border border-border-dark bg-dark-100/70 p-4 backdrop-blur-md transition-all duration-300 ease-in-out hover:-translate-y-2 hover:border-primary/40 hover:bg-dark-100 hover:shadow-[0_12px_35px_-10px_rgba(89,222,202,0.25)];
 
     .poster {
-      @apply h-[260px] w-full rounded-xl object-cover;
+      @apply aspect-[16/10] w-full rounded-xl object-cover;
     }
 
     .title {

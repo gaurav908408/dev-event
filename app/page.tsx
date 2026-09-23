@@ -22,9 +22,7 @@ export default async function Home() {
         category: e.tags?.[0] || e.mode || "Dev Event",
       }));
     }
-  } catch (err) {
-    // Database connection pending fallback
-  }
+  } catch (err) {}
 
   return (
     <main id="home" className="mx-auto container max-w-7xl px-6 sm:px-10 py-10">
@@ -55,4 +53,4 @@ export default async function Home() {
       </section>
     </main>
   );
-} 
+}

@@ -3,10 +3,6 @@ import connectToDatabase from "@/lib/mongodb";
 import { Event } from "@/database";
 import { events as defaultEvents } from "@/lib/constants";
 
-/**
- * GET /api/seed
- * Seeds initial event records into MongoDB Atlas database.
- */
 export async function GET() {
   try {
     await connectToDatabase();

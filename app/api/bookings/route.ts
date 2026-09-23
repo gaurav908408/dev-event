@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongodb";
 import { Booking, Event } from "@/database";
-import { events as defaultEvents } from "@/lib/constants";
 
-/**
- * POST /api/bookings
- * Registers a user booking for an event.
- */
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const body = await request.json();
     const { eventId, slug, email } = body;
 
-    // Validate email
     if (!email || typeof email !== "string" || !email.includes("@")) {
       return NextResponse.json(
         { success: false, error: "Please enter a valid email address." },
@@ -25,7 +19,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
       let targetEventId = eventId;
 
-      // If eventId not provided, search by slug
       if (!targetEventId && slug) {
         const foundEvent = await Event.findOne({ slug });
         if (foundEvent) {
@@ -33,7 +26,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         }
       }
 
-      // Create DB booking if event exists in DB
       if (targetEventId) {
         const booking = await Booking.create({
           eventId: targetEventId,
@@ -49,11 +41,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           { status: 201 }
         );
       }
-    } catch (dbError) {
-      // Fallback response for fallback static events
-    }
+    } catch (dbError) {}
 
-    // Return success response for static/demo events
     return NextResponse.json(
       {
         success: true,

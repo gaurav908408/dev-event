@@ -13,19 +13,19 @@ interface Props {
   category?: string;
 }
 
-const EventCard = ({ id, slug, title, image, location, date, time }: Props) => {
+const EventCard = ({ id, slug, title, image, location, date }: Props) => {
   const eventSlug = slug || id || title.toLowerCase().replace(/[^\w\s-]/g, "").replace(/[\s_-]+/g, "-");
 
   return (
     <Link href={`/events/${eventSlug}`}>
       <div id="event-card" className="group cursor-pointer">
-        <div className="overflow-hidden rounded-xl">
+        <div className="relative w-full aspect-[16/10] overflow-hidden rounded-xl">
           <Image
             src={image}
             alt={title}
-            width={410}
-            height={300}
-            className="poster transition-transform duration-300 ease-out group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="poster object-cover w-full h-full transition-transform duration-300 ease-out group-hover:scale-105"
           />
         </div>
 

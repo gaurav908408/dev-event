@@ -1,8 +1,5 @@
 import type { Document, Model, Types } from "mongoose";
 
-/**
- * Interface representing a Booking document in MongoDB.
- */
 export interface IBooking extends Document {
   eventId: Types.ObjectId;
   email: string;
@@ -58,8 +55,6 @@ try {
   });
 
   BookingModel = models.Booking || model("Booking", BookingSchema);
-} catch (e) {
-  // Fallback when mongoose is initializing
-}
+} catch (e) {}
 
 export default BookingModel;
