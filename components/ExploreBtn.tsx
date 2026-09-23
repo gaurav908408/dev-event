@@ -8,10 +8,7 @@ const ExploreBtn = () => {
     <a
       href="#events"
       id="explore-btn"
-      className="mt-7 mx-auto flex items-center justify-center gap-2"
-      onClick={() => {
-        console.log('click')
-      }}
+      className="group mt-7 mx-auto flex items-center justify-center gap-2"
     >
       <span>Explore events</span>
 
@@ -20,7 +17,7 @@ const ExploreBtn = () => {
         alt="arrow down"
         width={20}
         height={20}
-        className="w-5 h-5 object-contain"
+        className="w-5 h-5 object-contain group-hover:translate-y-1 transition-transform duration-300"
       />
     </a>
     </section>
