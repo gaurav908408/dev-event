@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 600" width="820" height="600">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d161a" />
+      <stop offset="50%" stop-color="#182830" />
+      <stop offset="100%" stop-color="#050b0e" />
+    </linearGradient>
+    <linearGradient id="accent1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#59deca" />
+      <stop offset="100%" stop-color="#94eaff" />
+    </linearGradient>
+    <linearGradient id="glow1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#59deca" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#94eaff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="820" height="600" fill="url(#bg1)" rx="16" />
+
+  <!-- Grid lines -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="100" x2="820" y2="100" />
+    <line x1="0" y1="200" x2="820" y2="200" />
+    <line x1="0" y1="300" x2="820" y2="300" />
+    <line x1="0" y1="400" x2="820" y2="400" />
+    <line x1="0" y1="500" x2="820" y2="500" />
+    <line x1="150" y1="0" x2="150" y2="600" />
+    <line x1="300" y1="0" x2="300" y2="600" />
+    <line x1="450" y1="0" x2="450" y2="600" />
+    <line x1="600" y1="0" x2="600" y2="600" />
+    <line x1="750" y1="0" x2="750" y2="600" />
+  </g>
+
+  <!-- Decorative Glow Circle -->
+  <circle cx="650" cy="180" r="220" fill="url(#glow1)" />
+  <circle cx="650" cy="180" r="140" stroke="url(#accent1)" stroke-width="2" stroke-dasharray="6,6" fill="none" opacity="0.6" />
+
+  <!-- Code Bracket Graphics -->
+  <g transform="translate(560, 110)">
+    <path d="M40 20L10 60L40 100" stroke="url(#accent1)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <path d="M90 20L120 60L90 100" stroke="url(#accent1)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+    <path d="M75 15L55 105" stroke="url(#accent1)" stroke-width="8" stroke-linecap="round" fill="none" />
+  </g>
+
+  <!-- Tag / Badge -->
+  <rect x="60" y="70" width="130" height="36" rx="18" fill="#59deca" fill-opacity="0.15" stroke="#59deca" stroke-width="1.5" />
+  <circle cx="82" cy="88" r="5" fill="#59deca" />
+  <text x="96" y="93" fill="#59deca" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1">HACKATHON</text>
+
+  <!-- Main Title -->
+  <text x="60" y="220" fill="#ffffff" font-family="system-ui, sans-serif" font-size="52" font-weight="800">Next.js &amp; AI</text>
+  <text x="60" y="285" fill="url(#accent1)" font-family="system-ui, sans-serif" font-size="52" font-weight="800">Dev Hackathon</text>
+
+  <!-- Description -->
+  <text x="60" y="345" fill="#bdbdbd" font-family="system-ui, sans-serif" font-size="20" font-weight="400">Build the future of full-stack AI web apps.</text>
+  <text x="60" y="375" fill="#bdbdbd" font-family="system-ui, sans-serif" font-size="20" font-weight="400">Win prizes, connect with devs &amp; showcase projects.</text>
+
+  <!-- Footer Info Bar -->
+  <rect x="60" y="460" width="700" height="70" rx="12" fill="#182830" stroke="#151024" stroke-width="2" />
+  <text x="90" y="502" fill="#e7f2ff" font-family="system-ui, sans-serif" font-size="18" font-weight="600">📅 OCT 15 - 17, 2026</text>
+  <text x="360" y="502" fill="#e7f2ff" font-family="system-ui, sans-serif" font-size="18" font-weight="600">📍 ONLINE / GLOBAL</text>
+  <text x="620" y="502" fill="#59deca" font-family="system-ui, sans-serif" font-size="18" font-weight="700">FREE</text>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" fill="none">
+  <defs>
+    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#59deca" />
+      <stop offset="100%" stop-color="#94eaff" />
+    </linearGradient>
+    <linearGradient id="logo-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#182830" />
+      <stop offset="100%" stop-color="#0d161a" />
+    </linearGradient>
+  </defs>
+  <!-- Background Hexagon/Shield -->
+  <rect x="5" y="5" width="90" height="90" rx="24" fill="url(#logo-bg)" stroke="url(#logo-grad)" stroke-width="4"/>
+  <!-- Code Icon < / > inside logo -->
+  <path d="M32 36L18 50L32 64" stroke="url(#logo-grad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M68 36L82 50L68 64" stroke="url(#logo-grad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M56 32L44 68" stroke="url(#logo-grad)" stroke-width="6" stroke-linecap="round"/>
+</svg>

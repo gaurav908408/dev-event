@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 600" width="820" height="600">
+  <defs>
+    <linearGradient id="bg-react" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b1329" />
+      <stop offset="100%" stop-color="#1c2a4e" />
+    </linearGradient>
+  </defs>
+
+  <rect width="820" height="600" fill="url(#bg-react)" rx="16" />
+
+  <!-- React Atom Graphic -->
+  <g transform="translate(620, 200)">
+    <ellipse rx="100" ry="38" stroke="#61dafb" stroke-width="4" fill="none" opacity="0.8" transform="rotate(0)" />
+    <ellipse rx="100" ry="38" stroke="#61dafb" stroke-width="4" fill="none" opacity="0.8" transform="rotate(60)" />
+    <ellipse rx="100" ry="38" stroke="#61dafb" stroke-width="4" fill="none" opacity="0.8" transform="rotate(120)" />
+    <circle r="16" fill="#61dafb" />
+  </g>
+
+  <!-- Badge -->
+  <rect x="60" y="70" width="120" height="36" rx="18" fill="#61dafb" fill-opacity="0.2" stroke="#61dafb" stroke-width="1.5" />
+  <text x="88" y="93" fill="#61dafb" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1">SUMMIT</text>
+
+  <!-- Title -->
+  <text x="60" y="220" fill="#ffffff" font-family="system-ui, sans-serif" font-size="56" font-weight="800">React Summit</text>
+  <text x="60" y="285" fill="#61dafb" font-family="system-ui, sans-serif" font-size="56" font-weight="800">Amsterdam 2026</text>
+
+  <text x="60" y="345" fill="#88a2ce" font-family="system-ui, sans-serif" font-size="20">The biggest React conference in the world.</text>
+
+  <!-- Info Bar -->
+  <rect x="60" y="460" width="700" height="70" rx="12" fill="#15223e" stroke="#253760" stroke-width="1.5" />
+  <text x="90" y="502" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="600">📅 JUN 14 - 18, 2026</text>
+  <text x="360" y="502" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="600">📍 AMSTERDAM &amp; HYBRID</text>
+  <text x="630" y="502" fill="#61dafb" font-family="system-ui, sans-serif" font-size="18" font-weight="700">TICKETS</text>
+</svg>

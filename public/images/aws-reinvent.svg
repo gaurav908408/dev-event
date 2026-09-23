@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 600" width="820" height="600">
+  <defs>
+    <linearGradient id="bg-aws" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f1923" />
+      <stop offset="100%" stop-color="#1a2b3c" />
+    </linearGradient>
+    <linearGradient id="orange-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ff9900" />
+      <stop offset="100%" stop-color="#ffc800" />
+    </linearGradient>
+  </defs>
+
+  <rect width="820" height="600" fill="url(#bg-aws)" rx="16" />
+
+  <!-- Cloud Graphic -->
+  <g transform="translate(620, 190)">
+    <path d="M-60 40 A45 45 0 0 1 10 -15 A60 60 0 0 1 110 20 A40 40 0 0 1 90 80 L-50 80 A35 35 0 0 1 -60 40 Z" fill="#ff9900" fill-opacity="0.2" stroke="url(#orange-grad)" stroke-width="4" />
+  </g>
+
+  <!-- Badge -->
+  <rect x="60" y="70" width="120" height="36" rx="18" fill="#ff9900" fill-opacity="0.2" stroke="#ff9900" stroke-width="1.5" />
+  <text x="88" y="93" fill="#ff9900" font-family="system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="1">CLOUD</text>
+
+  <!-- Title -->
+  <text x="60" y="220" fill="#ffffff" font-family="system-ui, sans-serif" font-size="56" font-weight="800">AWS re:Invent</text>
+  <text x="60" y="285" fill="url(#orange-grad)" font-family="system-ui, sans-serif" font-size="56" font-weight="800">Las Vegas 2026</text>
+
+  <text x="60" y="345" fill="#a0b3c6" font-family="system-ui, sans-serif" font-size="20">Cloud computing, serverless &amp; DevOps conference.</text>
+
+  <!-- Info Bar -->
+  <rect x="60" y="460" width="700" height="70" rx="12" fill="#152433" stroke="#25394e" stroke-width="1.5" />
+  <text x="90" y="502" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="600">📅 DEC 02 - 06, 2026</text>
+  <text x="360" y="502" fill="#ffffff" font-family="system-ui, sans-serif" font-size="18" font-weight="600">📍 LAS VEGAS, NV</text>
+  <text x="630" y="502" fill="#ff9900" font-family="system-ui, sans-serif" font-size="18" font-weight="700">REGISTER</text>
+</svg>
